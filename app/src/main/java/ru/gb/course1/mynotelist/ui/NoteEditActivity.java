@@ -3,6 +3,7 @@ package ru.gb.course1.mynotelist.ui;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
@@ -32,4 +33,5 @@ public class NoteEditActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_edit_note_activity, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 }

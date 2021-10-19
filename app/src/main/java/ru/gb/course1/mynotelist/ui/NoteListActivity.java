@@ -57,19 +57,24 @@ public class NoteListActivity extends AppCompatActivity {
         }
     }
 
-    private void openAddNoteActivity() {
-        Toast.makeText(this, "add note", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, NoteEditActivity.class);
-        startActivity(intent);
-    }
-
     private void initRecycle() {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.setList(notesRepo.getNotes());
+        adapter.setOnItemClickListener(this::onItemClick);
 
 
+    }
+
+    private void openAddNoteActivity() {
+        Intent intent = new Intent(this, NoteEditActivity.class);
+        startActivity(intent);
+    }
+
+    private void onItemClick(NoteEntity item) {
+        Toast.makeText(this, "add note", Toast.LENGTH_SHORT).show();
+        //openAddNoteActivity();
     }
 
     private void fillDefaultNotes() {
