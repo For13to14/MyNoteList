@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -73,8 +74,18 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     private void onItemClick(NoteEntity item) {
-        Toast.makeText(this, "add note", Toast.LENGTH_SHORT).show();
-        //openAddNoteActivity();
+        Intent intent = new Intent(this, NoteEditActivity.class);
+        intent.putExtra("item", item.getTitleNote());
+        intent.putExtra("text", item.getTextNote());
+        int id = notesRepo.getId(item);
+        startActivityForResult(intent, id);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (intent == null) {return;}
+        notesRepo.updateNote(requestCode, new NoteEntity(intent.getStringExtra("title"), intent.getStringExtra("text")));
     }
 
     private void fillDefaultNotes() {

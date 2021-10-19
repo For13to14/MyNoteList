@@ -48,4 +48,9 @@ public class NoteRepoImpl implements NotesRepo {
         listOfNotes.remove(index);
 
     }
+
+    @Override
+    public int getId(NoteEntity item) {
+        return listOfNotes.indexOf(item);
+    }
 }

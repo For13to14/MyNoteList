@@ -12,6 +12,8 @@ public interface NotesRepo {
 
     void deleteNote(int index);
 
+    int getId(NoteEntity item);
+
     /*
 
     Create-Read-Update-Delete CRUD

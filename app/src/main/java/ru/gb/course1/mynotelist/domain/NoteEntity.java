@@ -4,6 +4,7 @@ public class NoteEntity {
     //private int idNote;
     private String titleNote;
     private String textNote;
+    private int id;
 
     //todo date and time
 
@@ -19,4 +20,6 @@ public class NoteEntity {
     public String getTextNote() {
         return textNote;
     }
+
+    public int getId() {return id;}
 }
