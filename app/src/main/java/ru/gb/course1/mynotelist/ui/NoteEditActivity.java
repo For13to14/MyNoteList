@@ -3,6 +3,7 @@ package ru.gb.course1.mynotelist.ui;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +15,15 @@ public class NoteEditActivity extends AppCompatActivity {
     /*
     добавить обработчик меню
      */
+    private EditText titleNoteEditText;
+    private EditText textNoteEditText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_note);
+        titleNoteEditText = findViewById(R.id.title_note_edit_text);
+        textNoteEditText = findViewById(R.id.text_note_edit_text);
     }
 
     @Override

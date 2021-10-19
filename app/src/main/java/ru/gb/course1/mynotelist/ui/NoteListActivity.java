@@ -33,14 +33,9 @@ public class NoteListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_note_list);
 
         //test заполнение временными данными списка
-        NoteEntity note1 = new NoteEntity("title1", "text1");
-        notesRepo.createNote(note1);
-        notesRepo.createNote(new NoteEntity("title2", "text12"));
-        notesRepo.createNote(new NoteEntity("title3", "text123"));
-        notesRepo.createNote(new NoteEntity("title4", "text1234"));
-        notesRepo.createNote(new NoteEntity("title5", "text12345"));
-
+        fillDefaultNotes();
         initRecycle();
+
     }
 
 
@@ -68,13 +63,23 @@ public class NoteListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     private void initRecycle() {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.setList(notesRepo.getNotes());
 
+
+    }
+
+    private void fillDefaultNotes() {
+        String title = "title";
+        StringBuilder text = new StringBuilder();
+        text.append("text");
+        for (int i = 1; i < 16; i++) {
+            text.append(i);
+            notesRepo.createNote(new NoteEntity(title+i, text.toString()));
+        }
 
     }
 
