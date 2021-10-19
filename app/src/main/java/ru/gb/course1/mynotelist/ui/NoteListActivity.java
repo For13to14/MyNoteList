@@ -23,7 +23,7 @@ import ru.gb.course1.mynotelist.impl.NoteRepoImpl;
 
 public class NoteListActivity extends AppCompatActivity {
 
-    private RecyclerView recycleView;
+    private RecyclerView recyclerView;
     private NotesRepo notesRepo = new NoteRepoImpl();
     private NoteListAdapter adapter = new NoteListAdapter();
 
@@ -43,9 +43,6 @@ public class NoteListActivity extends AppCompatActivity {
         initRecycle();
     }
 
-    /*
-    Следующие три метода работают и относятся к меню
-     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,29 +62,23 @@ public class NoteListActivity extends AppCompatActivity {
         }
     }
 
-    private void openAddNoteActivity(){
+    private void openAddNoteActivity() {
         Toast.makeText(this, "add note", Toast.LENGTH_SHORT).show();
-
-        // создание объекта Intent для запуска SecondActivity
         Intent intent = new Intent(this, NoteEditActivity.class);
-        // передача объекта с ключом "hello" и значением "Hello World"
-        ///intent.putExtra("hello", "Hello World");
-        // запуск SecondActivity
         startActivity(intent);
     }
 
 
     private void initRecycle() {
-        recycleView = findViewById(R.id.recycler_view);
-        recycleView.setLayoutManager(new LinearLayoutManager(this));
-        recycleView.setAdapter(adapter);
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
         adapter.setList(notesRepo.getNotes());
-        return;
 
-    /*
-    Метод вывода РЕСАЙКЛ непосредственно. Списан с видео урока 6.
-    */
+
     }
+
+
 
 
 }

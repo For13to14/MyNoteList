@@ -12,7 +12,7 @@ import ru.gb.course1.mynotelist.R;
 public class NoteEditActivity extends AppCompatActivity {
 
     /*
-    Пока пустое активити для редактирования заметки
+    добавить обработчик меню
      */
 
     @Override
