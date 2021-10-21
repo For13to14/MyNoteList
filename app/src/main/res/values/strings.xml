@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MyNoteList</string>
+    <string name="text_note_edit_text">Note text</string>
+    <string name="note_title_edit_text">Note title</string>
+    <string name="save_note_button_text">Save note</string>
+    <string name="title_note_text_view_hint">title</string>
+    <string name="text_note_text_view_hint">text</string>
+    <string name="delete_menu_options_item">Delete</string>
+    <string name="add_note_menu_item">Add note</string>
 </resources>

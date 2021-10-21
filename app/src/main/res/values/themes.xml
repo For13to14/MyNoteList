@@ -3,14 +3,30 @@
     <style name="Theme.MyNoteList" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/view_background_color</item>
+        <item name="colorOnPrimary">@color/title_note_text_color</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@color/default_background_color</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+    <style name="BasicView">
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+    <style name="TitleNote" parent="BasicView">
+        <item name="android:textColor">@color/title_note_text_color</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:background">@color/view_background_color</item>
+    </style>
+    <style name="TextNote" parent="BasicView">
+        <item name="android:textColor">@color/text_note_text_color</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:background">@color/view_background_color</item>
     </style>
 </resources>
