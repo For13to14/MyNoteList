@@ -75,7 +75,7 @@ public class NoteListActivity extends AppCompatActivity {
 
     private void onItemClick(NoteEntity item) {
         Intent intent = new Intent(this, NoteEditActivity.class);
-        intent.putExtra("item", item.getTitleNote());
+        intent.putExtra("title", item.getTitleNote());
         intent.putExtra("text", item.getTextNote());
         int id = notesRepo.getId(item);
         startActivityForResult(intent, id);
