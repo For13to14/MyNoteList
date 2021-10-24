@@ -6,7 +6,7 @@ public interface NotesRepo {
 
     List<NoteEntity>getNotes();
 
-    void createNote();
+    int createNote();
 
     void updateNote(int index, NoteEntity newNote);
 

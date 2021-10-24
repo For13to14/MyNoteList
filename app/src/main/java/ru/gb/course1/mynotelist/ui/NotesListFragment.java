@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +27,7 @@ public class NotesListFragment extends Fragment {
     private NotesRepo notesRepo = new NoteRepoImpl();
     private NoteListAdapter adapter = new NoteListAdapter();
     private Controller controller;
+    private int noteId;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -39,6 +41,12 @@ public class NotesListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        requireActivity().getSupportFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                notesRepo.updateNote(noteId, result.getParcelable("key"));
+            }
+        });
         return inflater.inflate(R.layout.note_list_fragment, container, false);
     }
 
@@ -49,6 +57,11 @@ public class NotesListFragment extends Fragment {
         initRecycle(view);
         fillDefaultNotes();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -85,8 +98,10 @@ public class NotesListFragment extends Fragment {
     }
 
     private void onItemClick(NoteEntity item) {
+        this.noteId = notesRepo.getId(item);
         controller.openNoteFragment(item);
     }
+
 
 
     interface Controller {

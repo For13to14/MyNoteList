@@ -20,7 +20,9 @@ public class EditNoteFragment extends Fragment {
     private EditText textNoteEditText;
     private Button saveNoteButton;
 
-    private final String NOTE_KEY = "note_key";
+
+    private final String NOTE_DATA_KEY = "note_data_key";
+    //private final String NOTE_ID_KEY = "note_id_key";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class EditNoteFragment extends Fragment {
         saveNoteButton = view.findViewById(R.id.save_note_button);
 
         Bundle args = getArguments();
-        NoteEntity note = args.getParcelable(NOTE_KEY);
+        NoteEntity note = args.getParcelable(NOTE_DATA_KEY);
         titleNoteEditText.setText(note.getTitleNote());
         textNoteEditText.setText(note.getTextNote());
         saveNoteButton.setOnClickListener(v -> {
@@ -52,14 +54,22 @@ public class EditNoteFragment extends Fragment {
     }
 
     private void saveNoteButtonClick() {
+        //save note to repo
+        NoteEntity note = new NoteEntity(titleNoteEditText.getText().toString(), textNoteEditText.getText().toString());
+        Bundle result = new Bundle();
+        result.putParcelable("key", note);
+        getParentFragmentManager().setFragmentResult("requestKey", result);
 
+        //get list fragment back
+        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     public static EditNoteFragment newInstance(NoteEntity note) {
         EditNoteFragment fragment = new EditNoteFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(fragment.NOTE_KEY, note);
+        bundle.putParcelable(fragment.NOTE_DATA_KEY, note);
         fragment.setArguments(bundle);
         return fragment;
     }
+
 }
