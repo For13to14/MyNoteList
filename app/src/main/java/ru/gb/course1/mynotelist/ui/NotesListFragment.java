@@ -71,8 +71,8 @@ public class NotesListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_new_note_item:
-                //openAddNoteActivity();
-                //todo open new note
+                this.noteId = notesRepo.createNote() -1;
+                controller.openNoteFragment(notesRepo.getNote(noteId));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -80,7 +80,7 @@ public class NotesListFragment extends Fragment {
     }
 
     private void fillDefaultNotes() {
-        for (int i = 1; i < 16; i++) {
+        for (int i = 1; i < 5; i++) {
             notesRepo.createNote();
         }
 
@@ -95,9 +95,9 @@ public class NotesListFragment extends Fragment {
 
     }
 
-    private void onItemClick(NoteEntity item) {
-        this.noteId = notesRepo.getId(item);
-        controller.openNoteFragment(item);
+    private void onItemClick(NoteEntity note) {
+        this.noteId = notesRepo.getId(note);
+        controller.openNoteFragment(note);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class NotesListFragment extends Fragment {
     }
 
     interface Controller {
-        void openNoteFragment(NoteEntity item);
+        void openNoteFragment(NoteEntity note);
     }
 
 
