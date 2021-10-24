@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/view_background_color"
+    style="@style/BasicView"
+    android:layout_marginTop="@dimen/default_margin"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="?selectableItemBackground">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/note_title_text_view"
+            android:hint="@string/title_note_text_view_hint"
+            style="@style/TitleNote"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:textSize="@dimen/title_note_text_size"
+            android:textColor="@color/title_note_text_color"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/note_text_text_view"
+            android:hint="@string/text_note_text_view_hint"
+            android:textSize="@dimen/text_note_text_size"
+            android:maxHeight="100dp"
+            android:textColor="@color/text_note_text_color"/>
+
+    </LinearLayout>
+
+</FrameLayout>
