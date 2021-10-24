@@ -28,6 +28,7 @@ public class NotesListFragment extends Fragment {
     private NoteListAdapter adapter = new NoteListAdapter();
     private Controller controller;
     private int noteId;
+    private final String SAVE_NOTE_REQUEST_STRING = "save_note_request_string";
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -45,6 +46,7 @@ public class NotesListFragment extends Fragment {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 notesRepo.updateNote(noteId, result.getParcelable("key"));
+                adapter.notifyDataSetChanged();
             }
         });
         return inflater.inflate(R.layout.note_list_fragment, container, false);
@@ -57,11 +59,6 @@ public class NotesListFragment extends Fragment {
         initRecycle(view);
         fillDefaultNotes();
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -102,7 +99,11 @@ public class NotesListFragment extends Fragment {
         controller.openNoteFragment(item);
     }
 
-
+    @Override
+    public void onDestroy() {
+        controller = null;
+        super.onDestroy();
+    }
 
     interface Controller {
         void openNoteFragment(NoteEntity item);

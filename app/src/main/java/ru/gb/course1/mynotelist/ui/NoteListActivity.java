@@ -22,7 +22,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, new NotesListFragment())
+                .replace(R.id.fragment_container, new NotesListFragment())
                 .commit();
 
     }
@@ -31,7 +31,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
     public void openNoteFragment(NoteEntity item) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, new EditNoteFragment().newInstance(item))
+                .replace(R.id.fragment_container, new EditNoteFragment().newInstance(item))
                 .addToBackStack(null)
                 .commit();
     }
