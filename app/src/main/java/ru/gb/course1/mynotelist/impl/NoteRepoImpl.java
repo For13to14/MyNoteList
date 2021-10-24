@@ -29,8 +29,9 @@ public class NoteRepoImpl implements NotesRepo {
 
 
     @Override
-    public void createNote(@Nullable NoteEntity newNote) {
-        listOfNotes.add(newNote);
+    public void createNote() {
+        NoteEntity note = new NoteEntity("Title", "Text");
+        listOfNotes.add(note);
 
         /*
         + Ошибка где-то здесь
@@ -52,5 +53,10 @@ public class NoteRepoImpl implements NotesRepo {
     @Override
     public int getId(NoteEntity item) {
         return listOfNotes.indexOf(item);
+    }
+
+    @Override
+    public NoteEntity getNote(int id) {
+        return listOfNotes.get(id);
     }
 }

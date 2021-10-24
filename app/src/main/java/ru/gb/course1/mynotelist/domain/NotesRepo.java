@@ -6,13 +6,15 @@ public interface NotesRepo {
 
     List<NoteEntity>getNotes();
 
-    void createNote(NoteEntity newNote);
+    void createNote();
 
     void updateNote(int index, NoteEntity newNote);
 
     void deleteNote(int index);
 
     int getId(NoteEntity item);
+
+    NoteEntity getNote(int id);
 
     /*
 
