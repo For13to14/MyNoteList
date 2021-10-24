@@ -34,6 +34,7 @@ public class NotesListFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         controller = (Controller) context;
+        fillDefaultNotes();
     }
 
 
@@ -57,7 +58,7 @@ public class NotesListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recycler_view);
         initRecycle(view);
-        fillDefaultNotes();
+
 
     }
 
