@@ -24,19 +24,18 @@ import ru.gb.course1.mynotelist.impl.NoteRepoImpl;
 
 public class NotesListFragment extends Fragment {
     private RecyclerView recyclerView;
-    private NotesRepo notesRepo = new NoteRepoImpl();
-    private NoteListAdapter adapter = new NoteListAdapter();
+    private final NotesRepo notesRepo = new NoteRepoImpl();
+    private final NoteListAdapter adapter = new NoteListAdapter();
     private Controller controller;
     private int noteId;
-    private final String SAVE_NOTE_REQUEST_STRING = "save_note_request_string";
+
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         controller = (Controller) context;
-        fillDefaultNotes();
+        //fillDefaultNotes();
     }
-
 
 
     @Nullable
@@ -46,7 +45,11 @@ public class NotesListFragment extends Fragment {
         requireActivity().getSupportFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                notesRepo.updateNote(noteId, result.getParcelable("key"));
+                if (result.getString("action_key").equals("save_note")) {
+                    notesRepo.updateNote(noteId, result.getParcelable("bundleKey"));
+                } else {
+                    notesRepo.deleteNote(noteId);
+                }
                 adapter.notifyDataSetChanged();
             }
         });
@@ -64,14 +67,14 @@ public class NotesListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_note_list_activity, menu);
+        inflater.inflate(R.menu.menu_note_list_fragment, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_new_note_item:
-                this.noteId = notesRepo.createNote() -1;
+                this.noteId = notesRepo.createNote() - 1;
                 controller.openNoteFragment(notesRepo.getNote(noteId));
                 return true;
             default:

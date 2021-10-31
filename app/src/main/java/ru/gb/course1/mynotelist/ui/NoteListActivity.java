@@ -1,6 +1,7 @@
 package ru.gb.course1.mynotelist.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
@@ -14,6 +15,9 @@ import ru.gb.course1.mynotelist.domain.NoteEntity;
 */
 
 public class NoteListActivity extends AppCompatActivity implements NotesListFragment.Controller {
+    public final String BUNDLE_KEY = "bundle_key";
+    public final String EDIT_NOTE_REQUEST_KEY = "edit_note_request_key";
+    private Fragment fragment = new NotesListFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +26,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new NotesListFragment())
+                .replace(R.id.fragment_container, fragment)
                 .commit();
 
     }
