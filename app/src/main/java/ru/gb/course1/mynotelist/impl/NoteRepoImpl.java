@@ -29,13 +29,16 @@ public class NoteRepoImpl implements NotesRepo {
 
 
     @Override
-    public void createNote(@Nullable NoteEntity newNote) {
-        listOfNotes.add(newNote);
+    public int createNote() {
+        NoteEntity note = new NoteEntity("New note", "Text");
+        listOfNotes.add(note);
+        return listOfNotes.size();
 
-        /*
-        + Ошибка где-то здесь
-        Список ListOfNotes был объявлен но не инициализирован
-         */
+    }
+
+    @Override
+    public NoteEntity getNote(int id) {
+        return listOfNotes.get(id);
     }
 
     @Override
@@ -53,4 +56,7 @@ public class NoteRepoImpl implements NotesRepo {
     public int getId(NoteEntity item) {
         return listOfNotes.indexOf(item);
     }
+
+
+
 }
