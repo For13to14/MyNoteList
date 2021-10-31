@@ -88,7 +88,7 @@ public class EditNoteFragment extends Fragment {
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
-    public static EditNoteFragment newInstance(NoteEntity note) {
+    public EditNoteFragment newInstance(NoteEntity note) {
         EditNoteFragment fragment = new EditNoteFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(fragment.NOTE_DATA_KEY, note);
