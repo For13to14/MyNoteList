@@ -32,6 +32,7 @@ public class NotesListFragment extends Fragment {
 
 
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -46,6 +47,7 @@ public class NotesListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        setRetainInstance(true);
 
         requireActivity().getSupportFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
             @Override
@@ -58,7 +60,6 @@ public class NotesListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-
 
         return inflater.inflate(R.layout.note_list_fragment, container, false);
     }
@@ -118,6 +119,5 @@ public class NotesListFragment extends Fragment {
     interface Controller {
         void openNoteFragment(NoteEntity note);
     }
-
 
 }

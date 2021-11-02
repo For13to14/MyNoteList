@@ -21,26 +21,21 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
     public final String EDIT_NOTE_REQUEST_KEY = "edit_note_request_key";
     private Fragment fragment;
 
-    @Nullable
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        return fragment;
-    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
 
-        fragment = (Fragment) getLastCustomNonConfigurationInstance();
-        if(fragment == null) {
+        if (savedInstanceState == null) {
             fragment = new NotesListFragment();
-        }
-
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
                     .commit();
+        }
 
     }
 
