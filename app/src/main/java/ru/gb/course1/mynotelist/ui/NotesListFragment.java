@@ -2,6 +2,7 @@ package ru.gb.course1.mynotelist.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,18 +31,22 @@ public class NotesListFragment extends Fragment {
     private int noteId;
 
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         controller = (Controller) context;
+
         //fillDefaultNotes();
     }
+
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
         requireActivity().getSupportFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
@@ -53,15 +58,15 @@ public class NotesListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+
+
         return inflater.inflate(R.layout.note_list_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.recycler_view);
         initRecycle(view);
-
 
     }
 
@@ -95,6 +100,7 @@ public class NotesListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         adapter.setList(notesRepo.getNotes());
         adapter.setOnItemClickListener(this::onItemClick);
+
 
     }
 
