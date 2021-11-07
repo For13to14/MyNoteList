@@ -38,7 +38,7 @@ public class NotesListFragment extends Fragment {
         super.onAttach(context);
         controller = (Controller) context;
 
-        //fillDefaultNotes();
+        fillDefaultNotes();
     }
 
 
@@ -119,5 +119,6 @@ public class NotesListFragment extends Fragment {
     interface Controller {
         void openNoteFragment(NoteEntity note);
     }
+
 
 }
