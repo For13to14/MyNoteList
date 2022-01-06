@@ -25,6 +25,7 @@ import ru.gb.course1.mynotelist.domain.NoteEntity;
 public class NoteListActivity extends AppCompatActivity implements NotesListFragment.Controller {
 
     private NotesListFragment listFragment;
+    private AboutFragment aboutFragment = new AboutFragment();
 
     private NoteEntity noteEntity;
 
@@ -120,11 +121,24 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
                     listFragment.openEditNoteFragmentWithNewNote();
                 }
                 break;
+
             case R.id.second_item:
                 Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show();
                 break;
+
             case R.id.third_item:
-                Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show();
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    fragmentContainerId = R.id.additional_fragment_container;
+                } else {
+                    fragmentContainerId = R.id.main_fragment_container;
+                }
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(fragmentContainerId, aboutFragment)
+                        .addToBackStack(null)
+                        .commit();
+
                 break;
         }
         return false;
