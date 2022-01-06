@@ -16,13 +16,13 @@
         android:orientation="horizontal">
 
         <FrameLayout
-            android:id="@+id/fragment_container"
+            android:id="@+id/main_fragment_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <FrameLayout
-            android:id="@+id/fragment_container_2"
+            android:id="@+id/additional_fragment_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />

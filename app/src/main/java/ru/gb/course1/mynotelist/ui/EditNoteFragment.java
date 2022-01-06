@@ -19,18 +19,19 @@ import androidx.fragment.app.Fragment;
 import ru.gb.course1.mynotelist.R;
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 
-public class EditNoteFragment extends Fragment {
+public final class EditNoteFragment extends Fragment {
 
+    private static EditNoteFragment instance;
     private EditText titleNoteEditText;
     private EditText textNoteEditText;
     private Button saveNoteButton;
 
     private final String NOTE_DATA_KEY = "note_data_key";
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
     }
 
@@ -49,11 +50,14 @@ public class EditNoteFragment extends Fragment {
         saveNoteButton = view.findViewById(R.id.save_note_button);
 
         Bundle args = getArguments();
-        NoteEntity note = args.getParcelable(NOTE_DATA_KEY);
-        titleNoteEditText.setText(note.getTitleNote());
-        textNoteEditText.setText(note.getTextNote());
+        if (args != null) {
+            NoteEntity note = args.getParcelable(NOTE_DATA_KEY);
+            titleNoteEditText.setText(note.getTitleNote());
+            textNoteEditText.setText(note.getTextNote());
 
-        saveNoteButton.setOnClickListener(v -> {
+        }
+
+         saveNoteButton.setOnClickListener(v -> {
             returnNote("save_note");
         });
 
@@ -88,12 +92,14 @@ public class EditNoteFragment extends Fragment {
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
-    public EditNoteFragment newInstance(NoteEntity note) {
-        EditNoteFragment fragment = new EditNoteFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(fragment.NOTE_DATA_KEY, note);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static EditNoteFragment newInstance(NoteEntity note) {
+        if (instance == null) {
+            instance = new EditNoteFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(instance.NOTE_DATA_KEY, note);
+            instance.setArguments(bundle);
+        }
+        return instance;
     }
 
 }
