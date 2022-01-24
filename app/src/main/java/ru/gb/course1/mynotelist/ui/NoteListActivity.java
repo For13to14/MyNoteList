@@ -3,7 +3,6 @@ package ru.gb.course1.mynotelist.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -17,15 +16,10 @@ import ru.gb.course1.mynotelist.R;
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 
 
-/*
-Главное активити со списком заметок.
-Для отображения используем RecycleView
-*/
-
 public class NoteListActivity extends AppCompatActivity implements NotesListFragment.Controller {
 
     private NotesListFragment listFragment;
-    private AboutFragment aboutFragment = new AboutFragment();
+    private final AboutFragment aboutFragment = new AboutFragment();
 
     private NoteEntity noteEntity;
 
@@ -40,12 +34,9 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
 
-        //drawing side menu
-        //DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
-        //if there is no saved fragment - create new
         if (savedInstanceState == null) {
 
             listFragment = new NotesListFragment();

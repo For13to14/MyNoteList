@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -97,11 +99,46 @@ public class NotesListFragment extends Fragment implements Parcelable {
         recyclerView.setAdapter(adapter);
         adapter.setList(notesRepoImpl.getNotes());
         adapter.setOnItemClickListener(this::onItemClick);
+        //popup
+        adapter.setOnLongItemClickListener((note, v) -> onLongItemClick(note,v));
     }
 
     private void onItemClick(NoteEntity note) {
         this.noteId = notesRepoImpl.getId(note);
         controller.openEditNoteFragment(note);
+    }
+
+    //popup
+    private boolean onLongItemClick(NoteEntity note, View v)  {
+        Toast.makeText(requireContext(), note.getTitleNote(), Toast.LENGTH_SHORT).show();
+        showPopupMenu(note, v);
+        return true;
+    }
+
+    private void showPopupMenu(NoteEntity note, View v) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+        popupMenu.inflate(R.menu.view_popup_menu);
+
+
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.popup_edit_note_item:
+                    onItemClick(note);
+                    break;
+                case R.id.popup_delete_note_item:
+                    notesRepoImpl.deleteNote(notesRepoImpl.getId(note));
+                    adapter.notifyDataSetChanged();
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + menuItem.getItemId());
+            }
+            return false;
+
+        });
+
+        popupMenu.show();
+
+
     }
 
     //kill Controller
