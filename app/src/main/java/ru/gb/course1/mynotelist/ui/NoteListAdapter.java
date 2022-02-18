@@ -12,6 +12,7 @@ import java.util.List;
 
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 
+
 public class NoteListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private List<NoteEntity> list = new ArrayList<>();
@@ -23,8 +24,13 @@ public class NoteListAdapter extends RecyclerView.Adapter<ViewHolder> {
     public void setList(List<NoteEntity> list) {
         this.list=list;
         notifyDataSetChanged();
+
+
     }
 
+    public ArrayList<NoteEntity> getList() {
+        return (ArrayList<NoteEntity>) list;
+    }
 
     @NonNull
     @Override

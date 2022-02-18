@@ -18,7 +18,7 @@ public class NoteRepoImpl implements NotesRepo, Parcelable {
     ArrayList<NoteEntity> listOfNotes;
 
     @Override
-    public List<NoteEntity> getNotes() {
+    public ArrayList<NoteEntity> getNotes() {
         return listOfNotes;
 
     /*

@@ -11,17 +11,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import ru.gb.course1.mynotelist.R;
 import ru.gb.course1.mynotelist.domain.NoteEntity;
+import ru.gb.course1.mynotelist.domain.NoteListDiffUtil;
 import ru.gb.course1.mynotelist.impl.NoteRepoImpl;
 
 public class NotesListFragment extends Fragment implements Parcelable {
@@ -59,7 +60,13 @@ public class NotesListFragment extends Fragment implements Parcelable {
             } else {
                 notesRepoImpl.deleteNote(noteId);
             }
-            adapter.notifyDataSetChanged();
+
+            //DiffUtil
+            NoteListDiffUtil noteListDiffUtil = new NoteListDiffUtil(adapter.getList(), notesRepoImpl.getNotes());
+            DiffUtil.DiffResult noteDiffResult = DiffUtil.calculateDiff(noteListDiffUtil);
+            adapter.setList(notesRepoImpl.getNotes());
+            noteDiffResult.dispatchUpdatesTo(adapter);
+
         });
 
         return inflater.inflate(R.layout.note_list_fragment, container, false);
@@ -110,7 +117,6 @@ public class NotesListFragment extends Fragment implements Parcelable {
 
     //popup
     private boolean onLongItemClick(NoteEntity note, View v)  {
-        Toast.makeText(requireContext(), note.getTitleNote(), Toast.LENGTH_SHORT).show();
         showPopupMenu(note, v);
         return true;
     }
@@ -118,7 +124,6 @@ public class NotesListFragment extends Fragment implements Parcelable {
     private void showPopupMenu(NoteEntity note, View v) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), v);
         popupMenu.inflate(R.menu.view_popup_menu);
-
 
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             switch (menuItem.getItemId()) {

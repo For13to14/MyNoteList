@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -22,18 +23,12 @@ import ru.gb.course1.mynotelist.domain.NoteEntity;
 public final class EditNoteFragment extends Fragment {
 
     private static EditNoteFragment instance;
-    private EditText titleNoteEditText;
-    private EditText textNoteEditText;
+    private static Bundle bundle;
+    private  EditText titleNoteEditText;
+    private  EditText textNoteEditText;
     private Button saveNoteButton;
 
     private final String NOTE_DATA_KEY = "note_data_key";
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
 
     @Nullable
     @Override
@@ -54,13 +49,27 @@ public final class EditNoteFragment extends Fragment {
             NoteEntity note = args.getParcelable(NOTE_DATA_KEY);
             titleNoteEditText.setText(note.getTitleNote());
             textNoteEditText.setText(note.getTextNote());
-
         }
-
          saveNoteButton.setOnClickListener(v -> {
             returnNote("save_note");
         });
 
+        Toast.makeText(view.getContext(), titleNoteEditText.getText(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    public static EditNoteFragment newInstance(NoteEntity note) {
+        if (instance == null) {
+            instance = new EditNoteFragment();
+            bundle = new Bundle();
+            bundle.putParcelable(instance.NOTE_DATA_KEY, note);
+            instance.setArguments(bundle);
+        } else {
+            bundle.clear();
+            bundle.putParcelable(instance.NOTE_DATA_KEY, note);
+            instance.setArguments(bundle);
+        }
+        return instance;
     }
 
     @Override
@@ -87,19 +96,10 @@ public final class EditNoteFragment extends Fragment {
         result.putParcelable("bundleKey", note);
         getParentFragmentManager().setFragmentResult("requestKey", result);
 
-
         //get list fragment back
         getActivity().getSupportFragmentManager().popBackStack();
     }
 
-    public static EditNoteFragment newInstance(NoteEntity note) {
-        if (instance == null) {
-            instance = new EditNoteFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(instance.NOTE_DATA_KEY, note);
-            instance.setArguments(bundle);
-        }
-        return instance;
-    }
+
 
 }
