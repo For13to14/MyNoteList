@@ -12,4 +12,5 @@
     <string name="menu_item_second_item">second item</string>
     <string name="menu_item_about">About app</string>
     <string name="edit_menu_item">Edit</string>
+    <string name="note_date_text">Note Date</string>
 </resources>

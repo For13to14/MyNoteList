@@ -1,6 +1,7 @@
 package ru.gb.course1.mynotelist.ui;
 
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import ru.gb.course1.mynotelist.R;
 import ru.gb.course1.mynotelist.domain.NoteEntity;
@@ -24,9 +27,11 @@ public final class EditNoteFragment extends Fragment {
 
     private static EditNoteFragment instance;
     private static Bundle bundle;
-    private  EditText titleNoteEditText;
-    private  EditText textNoteEditText;
-    private Button saveNoteButton;
+    private EditText titleNoteEditText;
+    private EditText textNoteEditText;
+    //date
+    private TextView dateTextView;
+    private long dateAndTime;
 
     private final String NOTE_DATA_KEY = "note_data_key";
 
@@ -42,38 +47,69 @@ public final class EditNoteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         titleNoteEditText = view.findViewById(R.id.title_note_edit_text);
         textNoteEditText = view.findViewById(R.id.text_note_edit_text);
-        saveNoteButton = view.findViewById(R.id.save_note_button);
+        Button saveNoteButton = view.findViewById(R.id.save_note_button);
+
+        //date
+        dateTextView = view.findViewById(R.id.date_text_view);
+
 
         Bundle args = getArguments();
         if (args != null) {
             NoteEntity note = args.getParcelable(NOTE_DATA_KEY);
             titleNoteEditText.setText(note.getTitleNote());
             textNoteEditText.setText(note.getTextNote());
+            //date
+            dateAndTime = note.getDate();
+            dateTextView.setText(DateFormatting(dateAndTime));
         }
-         saveNoteButton.setOnClickListener(v -> {
-            returnNote("save_note");
+        saveNoteButton.setOnClickListener(v -> returnNote("save_note"));
+
+        dateTextView.setOnClickListener( v-> {
+            //datePicker
+            Calendar rightNow = Calendar.getInstance();
+            int selectedDate = rightNow.get(Calendar.DATE);
+            int selectedMonth = rightNow.get(Calendar.MONTH);
+            int selectedYear = rightNow.get(Calendar.YEAR);
+
+            DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, mouthOfYear, dayOfMonth) -> {
+                //dateTextView.setText(sdf.format(rightNow.getTimeInMillis()));
+                rightNow.set(Calendar.YEAR, year);
+                rightNow.set(Calendar.MONTH, mouthOfYear);
+                rightNow.set(Calendar.DATE, dayOfMonth);
+                dateTextView.setText(DateFormatting(rightNow.getTimeInMillis()));
+            };
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                    dateSetListener, selectedYear, selectedMonth, selectedDate);
+
+            datePickerDialog.show();
         });
 
-        Toast.makeText(view.getContext(), titleNoteEditText.getText(), Toast.LENGTH_SHORT).show();
+
 
     }
+
+    private String DateFormatting (long date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm dd.MM.yyyy");
+        return sdf.format(date);
+    }
+
+
 
     public static EditNoteFragment newInstance(NoteEntity note) {
         if (instance == null) {
             instance = new EditNoteFragment();
             bundle = new Bundle();
-            bundle.putParcelable(instance.NOTE_DATA_KEY, note);
-            instance.setArguments(bundle);
         } else {
             bundle.clear();
-            bundle.putParcelable(instance.NOTE_DATA_KEY, note);
-            instance.setArguments(bundle);
         }
+        bundle.putParcelable(instance.NOTE_DATA_KEY, note);
+        instance.setArguments(bundle);
         return instance;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_edit_note_fragment, menu);
     }
 
@@ -90,7 +126,7 @@ public final class EditNoteFragment extends Fragment {
 
     private void returnNote(String actionKey) {
         //save note to repo
-        NoteEntity note = new NoteEntity(titleNoteEditText.getText().toString(), textNoteEditText.getText().toString());
+        NoteEntity note = new NoteEntity(titleNoteEditText.getText().toString(), textNoteEditText.getText().toString(), dateAndTime);
         Bundle result = new Bundle();
         result.putString("action_key", actionKey);
         result.putParcelable("bundleKey", note);
@@ -99,6 +135,9 @@ public final class EditNoteFragment extends Fragment {
         //get list fragment back
         getActivity().getSupportFragmentManager().popBackStack();
     }
+
+    //date
+
 
 
 

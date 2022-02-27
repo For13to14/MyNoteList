@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 import ru.gb.course1.mynotelist.domain.NotesRepo;
@@ -30,7 +30,8 @@ public class NoteRepoImpl implements NotesRepo, Parcelable {
 
     @Override
     public int createNote() {
-        NoteEntity note = new NoteEntity("New note", "Text");
+        long date = Calendar.getInstance().getTimeInMillis();
+        NoteEntity note = new NoteEntity("New note", "Text", date);
         listOfNotes.add(note);
         return listOfNotes.size();
 
@@ -57,7 +58,7 @@ public class NoteRepoImpl implements NotesRepo, Parcelable {
         return listOfNotes.indexOf(item);
     }
 
-    //Parcell class methods
+    //Parcel class methods
     @Override
     public int describeContents() {
         return 0;

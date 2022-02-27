@@ -14,6 +14,14 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/about_fragment_date_textview"
+        android:text="@string/note_date_text"
+        style="@style/TextNote"
+        android:textAlignment="textEnd"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/fragment_about_text"
 
         android:textSize="@dimen/text_note_text_size"

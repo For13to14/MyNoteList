@@ -5,19 +5,21 @@ import android.os.Parcelable;
 
 public class NoteEntity implements Parcelable {
     //private int idNote;
-    private String titleNote;
-    private String textNote;
+    private final String titleNote;
+    private final String textNote;
+    //date and time
+    private final long timeAndDate;
 
-    //todo date and time
-
-    public NoteEntity(String titleNote, String textNote) {
+    public NoteEntity(String titleNote, String textNote, long timeAndDate) {
         this.titleNote=titleNote;
         this.textNote=textNote;
+        this.timeAndDate=timeAndDate;
     }
 
     protected NoteEntity(Parcel in) {
         titleNote = in.readString();
         textNote = in.readString();
+        timeAndDate = in.readLong();
     }
 
     public static final Creator<NoteEntity> CREATOR = new Creator<NoteEntity>() {
@@ -40,6 +42,9 @@ public class NoteEntity implements Parcelable {
         return textNote;
     }
 
+    //date and time
+    public long getDate() {return timeAndDate;}
+
 
     @Override
     public int describeContents() {
@@ -50,5 +55,6 @@ public class NoteEntity implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(titleNote);
         parcel.writeString(textNote);
+        parcel.writeLong(timeAndDate);
     }
 }
