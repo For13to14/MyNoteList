@@ -8,7 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -21,6 +21,8 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
     private NotesListFragment listFragment;
     private final AboutFragment aboutFragment = new AboutFragment();
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
 
     private NoteEntity noteEntity;
 
@@ -34,9 +36,14 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
+
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view_menu);
+        navigationView = findViewById(R.id.nav_view_menu);
+
+
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         if (savedInstanceState == null) {
@@ -56,6 +63,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
         }
 
     }
+
 
     private void createNewMainFragment() {
         getSupportFragmentManager()
@@ -116,7 +124,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
                 break;
 
             case R.id.second_item:
-                Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.third_item:
@@ -141,6 +149,19 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
 
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == android.R.id.home) {
+            if(drawerLayout.isDrawerOpen(navigationView)) {
+                drawerLayout.closeDrawer(navigationView);
+            } else {
+                drawerLayout.openDrawer(navigationView);
+            }
+        }
+        return true;
     }
 
     //saving fragment to parcel
