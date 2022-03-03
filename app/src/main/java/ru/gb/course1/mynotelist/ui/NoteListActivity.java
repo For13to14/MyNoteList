@@ -1,39 +1,181 @@
 package ru.gb.course1.mynotelist.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.MenuItem;
+
+import com.google.android.material.navigation.NavigationView;
 
 import ru.gb.course1.mynotelist.R;
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 
 
-/*
-Главное активити со списком заметок.
-Для отображения используем RecycleView
-*/
-
 public class NoteListActivity extends AppCompatActivity implements NotesListFragment.Controller {
+
+    private NotesListFragment listFragment;
+    private final AboutFragment aboutFragment = new AboutFragment();
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
+
+    private NoteEntity noteEntity;
+
+    private final int MAIN_FRAGMENT_CONTAINER_ID = R.id.main_fragment_container;
+    private final int ADDITIONAL_FRAGMENT_CONTAINER_ID = R.id.additional_fragment_container;
+    private int fragmentContainerId = MAIN_FRAGMENT_CONTAINER_ID;
+
+
+    private final String LIST_FRAGMENT_KEY = "LIST";
+    private final String NOTE_ENTITY_KEY = "NOTE";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
+        
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
 
-        getSupportFragmentManager()
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view_menu);
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+
+        if (savedInstanceState == null) {
+            listFragment = new NotesListFragment();
+            replaceListFragmentToMainContainer();
+        } else {
+            listFragment = savedInstanceState.getParcelable(LIST_FRAGMENT_KEY);
+            noteEntity = savedInstanceState.getParcelable(NOTE_ENTITY_KEY);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                DrawLandscapeLayout(savedInstanceState);
+            } else {
+                DrawPortraitLayout(savedInstanceState);
+            }
+        }
+
+    }
+    
+    private void replaceListFragmentToMainContainer() {
+        replaceFragment(MAIN_FRAGMENT_CONTAINER_ID, listFragment, false);
+    }
+
+    private void replaceFragment(int containerID, Fragment fragment, boolean addToBackStack) {
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new NotesListFragment())
-                .commit();
+                .replace(containerID, fragment);
+        if(addToBackStack) {fragmentTransaction.addToBackStack(null);}
+                fragmentTransaction.commit();
+    }
 
+    private void DrawLandscapeLayout(Bundle savedInstanceState) {
+
+        if (savedInstanceState !=null) {
+            listFragment = savedInstanceState.getParcelable(LIST_FRAGMENT_KEY);
+        }
+        
+        replaceListFragmentToMainContainer();
+        fragmentContainerId = ADDITIONAL_FRAGMENT_CONTAINER_ID;
+        noteEntity = savedInstanceState.getParcelable(NOTE_ENTITY_KEY);
+        if (noteEntity != null) {
+            openEditNoteFragment(noteEntity);
+        }
+
+    }
+
+    private void DrawPortraitLayout(Bundle savedInstanceState) {
+
+        fragmentContainerId = MAIN_FRAGMENT_CONTAINER_ID;
+        if (getSupportFragmentManager().findFragmentById(ADDITIONAL_FRAGMENT_CONTAINER_ID) != null) {
+            noteEntity = savedInstanceState.getParcelable(NOTE_ENTITY_KEY);
+            openEditNoteFragment(noteEntity);
+        } else {
+            listFragment = savedInstanceState.getParcelable(LIST_FRAGMENT_KEY);
+            replaceFragment(MAIN_FRAGMENT_CONTAINER_ID, listFragment, false);
+        }
     }
 
     @Override
-    public void openNoteFragment(NoteEntity item) {
+    public void openEditNoteFragment(NoteEntity note) {
         getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new EditNoteFragment().newInstance(item))
-                .addToBackStack(null)
-                .commit();
+                    .beginTransaction()
+                    .replace(fragmentContainerId, EditNoteFragment.newInstance(note))
+                    .addToBackStack(null)
+                    .commit();
+        noteEntity = note;
     }
+    
+    //side menu click
+    private boolean onNavigationItemSelected(MenuItem item) {
+        
+        switch (item.getItemId()) {
+            case R.id.first_item:
+                if (listFragment != null) {
+                    listFragment.openEditNoteFragmentWithNewNote();
+                }
+                break;
+
+            case R.id.second_item:
+                replaceListFragmentToMainContainer();
+                break;
+
+            case R.id.third_item:
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    fragmentContainerId = ADDITIONAL_FRAGMENT_CONTAINER_ID;
+                } else {
+                    fragmentContainerId = MAIN_FRAGMENT_CONTAINER_ID;
+                }
+
+                replaceFragment(fragmentContainerId, aboutFragment, true);
+                break;
+        }
+        drawerLayout.closeDrawers();
+        return true;
+    }
+
+    //toolbar menu button
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(drawerLayout.isDrawerOpen(navigationView)) {
+                    drawerLayout.closeDrawer(navigationView);
+                } else {
+                    drawerLayout.openDrawer(navigationView);
+                }
+            break;
+
+            default:
+
+                if (!getSupportFragmentManager()
+                        .findFragmentById(MAIN_FRAGMENT_CONTAINER_ID)
+                        .onOptionsItemSelected(item)) {
+
+                    getSupportFragmentManager()
+                            .findFragmentById(ADDITIONAL_FRAGMENT_CONTAINER_ID)
+                            .onOptionsItemSelected(item);
+                }
+                break;
+        }
+        return true;
+    }
+
+    //saving fragment to parcel
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(LIST_FRAGMENT_KEY, listFragment);
+        outState.putParcelable(NOTE_ENTITY_KEY, noteEntity);
+    }
+
 
 }

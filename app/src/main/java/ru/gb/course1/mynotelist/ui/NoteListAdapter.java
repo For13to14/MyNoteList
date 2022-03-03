@@ -1,6 +1,7 @@
 package ru.gb.course1.mynotelist.ui;
 
 
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,10 +12,13 @@ import java.util.List;
 
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 
+
 public class NoteListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     private List<NoteEntity> list = new ArrayList<>();
     private OnItemClickListener clickListener = null;
+    //popup
+    private OnLongItemClickListener longClickListener = null;
 
 
     public void setList(List<NoteEntity> list) {
@@ -22,11 +26,15 @@ public class NoteListAdapter extends RecyclerView.Adapter<ViewHolder> {
         notifyDataSetChanged();
     }
 
+    public ArrayList<NoteEntity> getList() {
+        return (ArrayList<NoteEntity>) list;
+    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(parent, clickListener);
+        //popup
+        return new ViewHolder(parent, clickListener, longClickListener);
     }
 
     @Override
@@ -49,7 +57,16 @@ public class NoteListAdapter extends RecyclerView.Adapter<ViewHolder> {
         clickListener = listener;
     }
 
+    //popup
+    public void setOnLongItemClickListener(OnLongItemClickListener listener) {
+        longClickListener = listener;
+    }
+
     interface OnItemClickListener {
         void onItemClick(NoteEntity item);
+    }
+    //popup
+    interface OnLongItemClickListener {
+        boolean onLongItemClick(NoteEntity item, View view);
     }
 }

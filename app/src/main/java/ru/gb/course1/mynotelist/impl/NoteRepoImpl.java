@@ -1,28 +1,28 @@
 package ru.gb.course1.mynotelist.impl;
 
-import androidx.annotation.Nullable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 import ru.gb.course1.mynotelist.domain.NotesRepo;
 
-public class NoteRepoImpl implements NotesRepo {
+public class NoteRepoImpl implements NotesRepo, Parcelable {
 
     /*
-    Воплощение интерфейса репозитория записок. Хранит все записки и обрабатывает их.
+    implementation of interface Notes repository. Keeps all notes
      */
 
-    ArrayList<NoteEntity> listOfNotes = new ArrayList<>();
-
+    ArrayList<NoteEntity> listOfNotes;
 
     @Override
-    public List<NoteEntity> getNotes() {
+    public ArrayList<NoteEntity> getNotes() {
         return listOfNotes;
 
-        /*
-    Адаптер берет этим методом данные для ресайкл вью
+    /*
+    adapter takes data for Recycle View by this method
      */
 
     }
@@ -30,7 +30,8 @@ public class NoteRepoImpl implements NotesRepo {
 
     @Override
     public int createNote() {
-        NoteEntity note = new NoteEntity("New note", "Text");
+        long date = Calendar.getInstance().getTimeInMillis();
+        NoteEntity note = new NoteEntity("New note", "Text", date);
         listOfNotes.add(note);
         return listOfNotes.size();
 
@@ -57,6 +58,35 @@ public class NoteRepoImpl implements NotesRepo {
         return listOfNotes.indexOf(item);
     }
 
+    //Parcel class methods
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeList(listOfNotes);
+    }
+
+    public static final Creator<NoteRepoImpl> CREATOR = new Creator<NoteRepoImpl>() {
+        @Override
+        public NoteRepoImpl createFromParcel(Parcel in) {
+            return new NoteRepoImpl(in);
+        }
+
+        @Override
+        public NoteRepoImpl[] newArray(int size) {
+            return new NoteRepoImpl[size];
+        }
+    };
+
+    protected NoteRepoImpl(Parcel in) {
+        listOfNotes = in.createTypedArrayList(NoteEntity.CREATOR);
+    }
+
+    public NoteRepoImpl() {
+        listOfNotes = new ArrayList<>();
+    }
 
 }

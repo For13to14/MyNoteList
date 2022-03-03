@@ -17,9 +17,13 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     private NoteEntity note;
 
 
-    public ViewHolder(@NonNull ViewGroup parent, NoteListAdapter.OnItemClickListener clickListener) {
+    public ViewHolder(@NonNull ViewGroup parent,
+                      NoteListAdapter.OnItemClickListener clickListener,
+                      NoteListAdapter.OnLongItemClickListener longClickListener) {
         super(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false));
         itemView.setOnClickListener(v -> clickListener.onItemClick(note));
+        //popup
+        itemView.setOnLongClickListener(view -> longClickListener.onLongItemClick(note, view));
     }
 
     public void bind(NoteEntity item) {

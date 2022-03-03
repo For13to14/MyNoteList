@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MyNoteList" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.MyNoteList" parent="Theme.MaterialComponents.DayNight.DarkActionBar"> //here we broke menu
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/default_button_and_field_color</item>
         <item name="colorPrimaryVariant">@color/view_background_color</item>
         <item name="colorOnPrimary">@color/title_note_text_color</item>
         <!-- Secondary brand color. -->
