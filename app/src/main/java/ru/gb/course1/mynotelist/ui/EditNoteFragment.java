@@ -33,11 +33,13 @@ public final class EditNoteFragment extends Fragment {
     private TextView dateTextView;
     private long dateAndTime;
 
-    private final String NOTE_DATA_KEY = "note_data_key";
+    private final static String NOTE_DATA_KEY = "note_data_key";
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         return inflater.inflate(R.layout.edit_note_fragment, container, false);
     }
@@ -45,8 +47,8 @@ public final class EditNoteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        titleNoteEditText = view.findViewById(R.id.title_note_edit_text);
-        textNoteEditText = view.findViewById(R.id.text_note_edit_text);
+        instance.titleNoteEditText = view.findViewById(R.id.title_note_edit_text);
+        instance.textNoteEditText = view.findViewById(R.id.text_note_edit_text);
         Button saveNoteButton = view.findViewById(R.id.save_note_button);
 
         //date
@@ -56,16 +58,17 @@ public final class EditNoteFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             NoteEntity note = args.getParcelable(NOTE_DATA_KEY);
-            titleNoteEditText.setText(note.getTitleNote());
-            textNoteEditText.setText(note.getTextNote());
+            instance.titleNoteEditText.setText(note.getTitleNote());
+            instance.textNoteEditText.setText(note.getTextNote());
             //date
             dateAndTime = note.getDate();
             dateTextView.setText(DateFormatting(dateAndTime));
         }
         saveNoteButton.setOnClickListener(v -> returnNote("save_note"));
 
+        //datePicker
         dateTextView.setOnClickListener( v-> {
-            //datePicker
+
             Calendar rightNow = Calendar.getInstance();
             int selectedDate = rightNow.get(Calendar.DATE);
             int selectedMonth = rightNow.get(Calendar.MONTH);
@@ -86,15 +89,12 @@ public final class EditNoteFragment extends Fragment {
         });
 
 
-
     }
 
     private String DateFormatting (long date) {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm dd.MM.yyyy");
         return sdf.format(date);
     }
-
-
 
     public static EditNoteFragment newInstance(NoteEntity note) {
         if (instance == null) {
@@ -103,7 +103,8 @@ public final class EditNoteFragment extends Fragment {
         } else {
             bundle.clear();
         }
-        bundle.putParcelable(instance.NOTE_DATA_KEY, note);
+
+        bundle.putParcelable(NOTE_DATA_KEY, note);
         instance.setArguments(bundle);
         return instance;
     }
@@ -120,13 +121,15 @@ public final class EditNoteFragment extends Fragment {
                 returnNote("delete_note");
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                //return super.onOptionsItemSelected(item);
+                return false;
         }
     }
 
     private void returnNote(String actionKey) {
         //save note to repo
-        NoteEntity note = new NoteEntity(titleNoteEditText.getText().toString(), textNoteEditText.getText().toString(), dateAndTime);
+        NoteEntity note = new NoteEntity(instance.titleNoteEditText.getText().toString(),
+                instance.textNoteEditText.getText().toString(), dateAndTime);
         Bundle result = new Bundle();
         result.putString("action_key", actionKey);
         result.putParcelable("bundleKey", note);
@@ -135,10 +138,4 @@ public final class EditNoteFragment extends Fragment {
         //get list fragment back
         getActivity().getSupportFragmentManager().popBackStack();
     }
-
-    //date
-
-
-
-
 }

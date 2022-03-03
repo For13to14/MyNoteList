@@ -4,11 +4,12 @@ package ru.gb.course1.mynotelist.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -26,7 +27,10 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
 
     private NoteEntity noteEntity;
 
-    private int fragmentContainerId = R.id.main_fragment_container;
+    private final int MAIN_FRAGMENT_CONTAINER_ID = R.id.main_fragment_container;
+    private final int ADDITIONAL_FRAGMENT_CONTAINER_ID = R.id.additional_fragment_container;
+    private int fragmentContainerId = MAIN_FRAGMENT_CONTAINER_ID;
+
 
     private final String LIST_FRAGMENT_KEY = "LIST";
     private final String NOTE_ENTITY_KEY = "NOTE";
@@ -36,22 +40,18 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
+        
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
 
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view_menu);
-
-
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         if (savedInstanceState == null) {
-
             listFragment = new NotesListFragment();
-            createNewMainFragment();
-
-
+            replaceListFragmentToMainContainer();
         } else {
             listFragment = savedInstanceState.getParcelable(LIST_FRAGMENT_KEY);
             noteEntity = savedInstanceState.getParcelable(NOTE_ENTITY_KEY);
@@ -63,13 +63,18 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
         }
 
     }
+    
+    private void replaceListFragmentToMainContainer() {
+        replaceFragment(MAIN_FRAGMENT_CONTAINER_ID, listFragment, false);
+    }
 
+    private void replaceFragment(int containerID, Fragment fragment, boolean addToBackStack) {
 
-    private void createNewMainFragment() {
-        getSupportFragmentManager()
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_fragment_container, listFragment)
-                .commit();
+                .replace(containerID, fragment);
+        if(addToBackStack) {fragmentTransaction.addToBackStack(null);}
+                fragmentTransaction.commit();
     }
 
     private void DrawLandscapeLayout(Bundle savedInstanceState) {
@@ -77,8 +82,9 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
         if (savedInstanceState !=null) {
             listFragment = savedInstanceState.getParcelable(LIST_FRAGMENT_KEY);
         }
-        createNewMainFragment();
-        fragmentContainerId = R.id.additional_fragment_container;
+        
+        replaceListFragmentToMainContainer();
+        fragmentContainerId = ADDITIONAL_FRAGMENT_CONTAINER_ID;
         noteEntity = savedInstanceState.getParcelable(NOTE_ENTITY_KEY);
         if (noteEntity != null) {
             openEditNoteFragment(noteEntity);
@@ -88,34 +94,29 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
 
     private void DrawPortraitLayout(Bundle savedInstanceState) {
 
-        fragmentContainerId = R.id.main_fragment_container;
-        if (getSupportFragmentManager().findFragmentById(R.id.additional_fragment_container) != null) {
-
+        fragmentContainerId = MAIN_FRAGMENT_CONTAINER_ID;
+        if (getSupportFragmentManager().findFragmentById(ADDITIONAL_FRAGMENT_CONTAINER_ID) != null) {
             noteEntity = savedInstanceState.getParcelable(NOTE_ENTITY_KEY);
             openEditNoteFragment(noteEntity);
-
         } else {
             listFragment = savedInstanceState.getParcelable(LIST_FRAGMENT_KEY);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.main_fragment_container, listFragment)
-                    .commit();
+            replaceFragment(MAIN_FRAGMENT_CONTAINER_ID, listFragment, false);
         }
     }
 
     @Override
     public void openEditNoteFragment(NoteEntity note) {
-
         getSupportFragmentManager()
                     .beginTransaction()
                     .replace(fragmentContainerId, EditNoteFragment.newInstance(note))
                     .addToBackStack(null)
                     .commit();
-          noteEntity = note;
+        noteEntity = note;
     }
-
+    
+    //side menu click
     private boolean onNavigationItemSelected(MenuItem item) {
-        //side menu click
+        
         switch (item.getItemId()) {
             case R.id.first_item:
                 if (listFragment != null) {
@@ -124,42 +125,46 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
                 break;
 
             case R.id.second_item:
-                //Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show();
+                replaceListFragmentToMainContainer();
                 break;
 
             case R.id.third_item:
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    fragmentContainerId = R.id.additional_fragment_container;
+                    fragmentContainerId = ADDITIONAL_FRAGMENT_CONTAINER_ID;
                 } else {
-                    fragmentContainerId = R.id.main_fragment_container;
+                    fragmentContainerId = MAIN_FRAGMENT_CONTAINER_ID;
                 }
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(fragmentContainerId, aboutFragment)
-                        .addToBackStack(null)
-                        .commit();
-
+                replaceFragment(fragmentContainerId, aboutFragment, true);
                 break;
         }
-
         drawerLayout.closeDrawers();
-
         return true;
-
-
-
     }
 
+    //toolbar menu button
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if(drawerLayout.isDrawerOpen(navigationView)) {
+                    drawerLayout.closeDrawer(navigationView);
+                } else {
+                    drawerLayout.openDrawer(navigationView);
+                }
+            break;
 
-        if (item.getItemId() == android.R.id.home) {
-            if(drawerLayout.isDrawerOpen(navigationView)) {
-                drawerLayout.closeDrawer(navigationView);
-            } else {
-                drawerLayout.openDrawer(navigationView);
-            }
+            default:
+
+                if (!getSupportFragmentManager()
+                        .findFragmentById(MAIN_FRAGMENT_CONTAINER_ID)
+                        .onOptionsItemSelected(item)) {
+
+                    getSupportFragmentManager()
+                            .findFragmentById(ADDITIONAL_FRAGMENT_CONTAINER_ID)
+                            .onOptionsItemSelected(item);
+                }
+                break;
         }
         return true;
     }

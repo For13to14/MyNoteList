@@ -66,7 +66,6 @@ public class NotesListFragment extends Fragment implements Parcelable {
             DiffUtil.DiffResult noteDiffResult = DiffUtil.calculateDiff(noteListDiffUtil);
             adapter.setList(notesRepoImpl.getNotes());
             noteDiffResult.dispatchUpdatesTo(adapter);
-
         });
 
         return inflater.inflate(R.layout.note_list_fragment, container, false);
@@ -90,13 +89,15 @@ public class NotesListFragment extends Fragment implements Parcelable {
                 openEditNoteFragmentWithNewNote();
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                //return super.onOptionsItemSelected(item);
+                return false;
         }
     }
 
     public void openEditNoteFragmentWithNewNote() {
         noteId = notesRepoImpl.createNote() - 1;
         controller.openEditNoteFragment(notesRepoImpl.getNote(noteId));
+        //Toast.makeText(requireContext(), "2222", Toast.LENGTH_SHORT).show();
     }
 
     private void initRecycle(View view) {
@@ -132,7 +133,7 @@ public class NotesListFragment extends Fragment implements Parcelable {
                     break;
                 case R.id.popup_delete_note_item:
                     notesRepoImpl.deleteNote(notesRepoImpl.getId(note));
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemRemoved(notesRepoImpl.getId(note));
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + menuItem.getItemId());
@@ -160,14 +161,12 @@ public class NotesListFragment extends Fragment implements Parcelable {
         outState.putInt("NOTE_ID_KEY", noteId);
     }
 
-    // Parcellable functions
+    // Parcelable functions
     protected NotesListFragment(Parcel in) {
         noteId = in.readInt();
     }
 
-    public NotesListFragment() {
-
-    }
+    public NotesListFragment() {}
 
     public static final Creator<NotesListFragment> CREATOR = new Creator<NotesListFragment>() {
         @Override

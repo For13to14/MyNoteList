@@ -9,6 +9,7 @@
 
     <item
         android:id="@+id/second_item"
+        android:icon="@drawable/ic_baseline_list_alt_24"
         android:title="@string/menu_item_second_item" />
 
     <item

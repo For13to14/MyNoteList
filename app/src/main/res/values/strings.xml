@@ -9,7 +9,7 @@
     <string name="add_note_menu_item">Add note</string>
     <string name="fragment_about_text">My application for keeping notes</string>
     <string name="menu_item_add_new_note">Add new note</string>
-    <string name="menu_item_second_item">second item</string>
+    <string name="menu_item_second_item">List of notes</string>
     <string name="menu_item_about">About app</string>
     <string name="edit_menu_item">Edit</string>
     <string name="note_date_text">Note Date</string>
