@@ -13,4 +13,6 @@
     <string name="menu_item_about">About app</string>
     <string name="edit_menu_item">Edit</string>
     <string name="note_date_text">Note Date</string>
+    <string name="snackbar_button_text">Yes</string>
+    <string name="snackbar_text">Are you sure?</string>
 </resources>

@@ -17,6 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.snackbar.SnackbarContentLayout;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -118,7 +122,7 @@ public final class EditNoteFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_note_item:
-                returnNote("delete_note");
+                deletingNote();
                 return true;
             default:
                 //return super.onOptionsItemSelected(item);
@@ -137,5 +141,11 @@ public final class EditNoteFragment extends Fragment {
 
         //get list fragment back
         getActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    private void deletingNote() {
+        Snackbar snackbar = Snackbar.make(getView(), R.string.snackbar_text, BaseTransientBottomBar.LENGTH_LONG);
+        snackbar.setAction(R.string.snackbar_button_text, view -> returnNote("delete_note"));
+        snackbar.show();
     }
 }
