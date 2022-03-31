@@ -11,21 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.snackbar.SnackbarContentLayout;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 import ru.gb.course1.mynotelist.R;
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 

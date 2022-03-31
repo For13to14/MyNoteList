@@ -97,7 +97,6 @@ public class NotesListFragment extends Fragment implements Parcelable {
     public void openEditNoteFragmentWithNewNote() {
         noteId = notesRepoImpl.createNote() - 1;
         controller.openEditNoteFragment(notesRepoImpl.getNote(noteId));
-        //Toast.makeText(requireContext(), "2222", Toast.LENGTH_SHORT).show();
     }
 
     private void initRecycle(View view) {

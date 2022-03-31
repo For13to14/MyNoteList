@@ -1,27 +1,16 @@
 package ru.gb.course1.mynotelist.ui;
 
-
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.DialogCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
 import ru.gb.course1.mynotelist.R;
 import ru.gb.course1.mynotelist.domain.NoteEntity;
 
