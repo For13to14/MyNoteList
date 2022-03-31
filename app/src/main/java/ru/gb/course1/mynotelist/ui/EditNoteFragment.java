@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -144,8 +146,14 @@ public final class EditNoteFragment extends Fragment {
     }
 
     private void deletingNote() {
-        Snackbar snackbar = Snackbar.make(getView(), R.string.snackbar_text, BaseTransientBottomBar.LENGTH_LONG);
-        snackbar.setAction(R.string.snackbar_button_text, view -> returnNote("delete_note"));
+
+        Snackbar snackbar = Snackbar.make(getView(),
+                R.string.snackbar_text,
+                Snackbar.LENGTH_LONG);
         snackbar.show();
+
+        snackbar.setAction(R.string.snackbar_button_text,
+                view -> returnNote("delete_note"));
+
     }
 }

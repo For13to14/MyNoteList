@@ -1,17 +1,26 @@
 package ru.gb.course1.mynotelist.ui;
 
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.DialogCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import ru.gb.course1.mynotelist.R;
 import ru.gb.course1.mynotelist.domain.NoteEntity;
@@ -40,7 +49,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
-        
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
 
@@ -63,7 +72,7 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
         }
 
     }
-    
+
     private void replaceListFragmentToMainContainer() {
         replaceFragment(MAIN_FRAGMENT_CONTAINER_ID, listFragment, false);
     }
@@ -73,16 +82,18 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
         FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction()
                 .replace(containerID, fragment);
-        if(addToBackStack) {fragmentTransaction.addToBackStack(null);}
-                fragmentTransaction.commit();
+        if (addToBackStack) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragmentTransaction.commit();
     }
 
     private void DrawLandscapeLayout(Bundle savedInstanceState) {
 
-        if (savedInstanceState !=null) {
+        if (savedInstanceState != null) {
             listFragment = savedInstanceState.getParcelable(LIST_FRAGMENT_KEY);
         }
-        
+
         replaceListFragmentToMainContainer();
         fragmentContainerId = ADDITIONAL_FRAGMENT_CONTAINER_ID;
         noteEntity = savedInstanceState.getParcelable(NOTE_ENTITY_KEY);
@@ -107,16 +118,16 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
     @Override
     public void openEditNoteFragment(NoteEntity note) {
         getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(fragmentContainerId, EditNoteFragment.newInstance(note))
-                    .addToBackStack(null)
-                    .commit();
+                .beginTransaction()
+                .replace(fragmentContainerId, EditNoteFragment.newInstance(note))
+                .addToBackStack(null)
+                .commit();
         noteEntity = note;
     }
-    
+
     //side menu click
     private boolean onNavigationItemSelected(MenuItem item) {
-        
+
         switch (item.getItemId()) {
             case R.id.first_item:
                 if (listFragment != null) {
@@ -147,12 +158,12 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if(drawerLayout.isDrawerOpen(navigationView)) {
+                if (drawerLayout.isDrawerOpen(navigationView)) {
                     drawerLayout.closeDrawer(navigationView);
                 } else {
                     drawerLayout.openDrawer(navigationView);
                 }
-            break;
+                break;
 
             default:
 
@@ -176,6 +187,30 @@ public class NoteListActivity extends AppCompatActivity implements NotesListFrag
         outState.putParcelable(LIST_FRAGMENT_KEY, listFragment);
         outState.putParcelable(NOTE_ENTITY_KEY, noteEntity);
     }
+
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount()<1) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.exit_dialog_title)
+                    .setCancelable(true)
+                    .setMessage(R.string.exit_dialog_message)
+                    .setIcon(R.drawable.ic_baseline_delete_forever_24)
+                    .setPositiveButton(R.string.exit_dialog_positive_btn_text, (dialogInterface, i) ->
+                            super.onBackPressed())
+                    .setNegativeButton(R.string.exit_dialog_negative_btn_text, null)
+                    .create()
+                    .show();
+
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
 
 
 }

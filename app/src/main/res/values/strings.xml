@@ -15,4 +15,8 @@
     <string name="note_date_text">Note Date</string>
     <string name="snackbar_button_text">Yes</string>
     <string name="snackbar_text">Are you sure?</string>
+    <string name="exit_dialog_title">Exit</string>
+    <string name="exit_dialog_message">Are you sure want to exit?</string>
+    <string name="exit_dialog_positive_btn_text">Yes</string>
+    <string name="exit_dialog_negative_btn_text">No</string>
 </resources>
